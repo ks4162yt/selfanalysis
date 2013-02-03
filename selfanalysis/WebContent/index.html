@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>婚活プロト</title>
+
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+    <h1>婚活自己診断</h1>
+    <div id="selfChecker">
+        <div class="formContainer"></div>
+        <div class="moreForm">もっと入力する</div>
+        <button class="checkBtn">結果を見る</div>
+        <input id="yourname" type="text"/>
+        <button id="dataLoadBtn">データをロード</button>
+    </div>
+
+    <div id="selfCheckResult">
+    </div>
+
+    <!-- TODO: delete "http" when this html is deployed-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="js/libs/raphael.2.1.0.min.js"></script>
+    <script src="js/libs/elycharts.2.1.4.min.js"></script>
+    <script src="js/libs/matrix_library_v010g.custom.js"></script>
+    <script src="js/multiRegUtil.js"></script>
+    <script>
+
+    var formCreator = {
+        id: 0,
+
+        createSelector: function(type, range) {
+            var selectorEl = $(document.createElement('select'));
+            selectorEl.addClass(type);
+
+            for (var i = 0; i < range; i++) {
+                var optionEl = $(document.createElement('option'));
+                optionEl.attr('value', i + 1).append(i + 1);
+                if (i === 4) {
+                    optionEl.attr('selected', 'selected');
+                }
+                selectorEl.append(optionEl);
+            }
+
+            return selectorEl;
+        },
+
+        create: function() {
+            var formEl = $(document.createElement('div'));
+            formEl.attr('id', 'form_' + this.id);
+
+            //add appearance
+            formEl.append('容姿 ').append(this.createSelector('appearance', 10));
+            //add appearance
+            formEl.append('性格 ').append(this.createSelector('character', 10));
+            //add appearance
+            formEl.append('年齢 ').append(this.createSelector('age', 10));
+            //add appearance
+            formEl.append('収入 ').append(this.createSelector('income', 10));
+            //add appearance
+            formEl.append('学歴 ').append(this.createSelector('status', 10));
+            //add total
+            formEl.append('総合 ').append(this.createSelector('total', 10));
+            this.id++;
+
+            return formEl;
+        }
+    };
+
+    $(function() {
+
+        //====== init ======
+        function appendForm() {
+            $('.formContainer').append(formCreator.create());
+        }
+        for (var i = 0; i < 6; i++) {
+            appendForm();
+        }
+
+        $('.moreForm').click(appendForm);
+        
+        $('#dataLoadBtn').click(function(){
+        	//$('#yourname').val('hello world');
+        	$.ajaxSetup({
+        		url: "mainServlet",
+        		type: "POST",
+        		cache: false
+        	});
+        	
+        	$.ajax({
+        		beforeSend: function(){
+        			console.log("送ります");	
+        		},
+        		success: function(data, textStatus){
+        			console.log("textStatus =" + textStatus);
+        		}
+        	})
+        });
+
+        $('.checkBtn').click(function() {
+            var formEls = $('.formContainer').children();
+            var size = formEls.length;
+            var datas = [];
+
+            for (var i = 0; i < size; i++) {
+                var formEl = $(formEls[i]);
+                var data = {};
+                data.appearance = formEl.find('.appearance').val();
+                data.character = formEl.find('.character').val();
+                data.age = formEl.find('.age').val();
+                data.income = formEl.find('.income').val();
+                data.status = formEl.find('.status').val();
+                data.total = formEl.find('.total').val();
+
+                datas.push(data);
+            }
+
+            var inObj = {};
+            inObj.size = size;
+            inObj.data = datas;
+
+            var prc = multiReg(inObj);
+            if (prc === 0) {
+                alert('解がない');
+                return;
+            }
+
+            for (var i = 0, max = prc.length; i < max; i++) {
+                if (prc[i] < 0) {
+                    prc[i] = 0;
+                }
+            }
+
+            //draw graph
+            var resultEl = $('#selfCheckResult');
+            resultEl.empty();
+            resultEl.chart({
+                type : "pie",
+                values : {
+                    serie1 : [prc[1], prc[2], prc[3], prc[4], prc[5]]
+                },
+                labels : ["容姿", "性格", "年齢", "収入", "学歴"],
+                //legend : ["容姿", "性格", "年齢", "収入", "学歴"],
+                tooltips : {
+                    serie1 : ["容姿", "性格", "年齢", "収入", "学歴"]
+                },
+                // defaultSeries : {
+                //     values : [{
+                //         plotProps : {
+                //             fill : "red"
+                //         }
+                //     }, {
+                //         plotProps : {
+                //             fill : "blue"
+                //         }
+                //     }, {
+                //         plotProps : {
+                //             fill : "green"
+                //         }
+                //     }, {
+                //         plotProps : {
+                //             fill : "gray"
+                //         }
+                //     }]
+                // }
+            });
+        });
+        //end init
+    });
+    </script>
+</body>
+</html>
