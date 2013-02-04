@@ -87,13 +87,18 @@
         		type: "POST",
         		cache: false
         	});
+
         	
         	$.ajax({
+        		data:{
+        			yourname:$('#yourname').val()
+        		},
         		beforeSend: function(){
         			console.log("送ります");	
         		},
         		success: function(data, textStatus){
         			console.log("textStatus =" + textStatus);
+        			console.log("data =" + data);
         		}
         	})
         });
