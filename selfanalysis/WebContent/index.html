@@ -51,7 +51,8 @@
             formEl.attr('id', 'form_' + this.id);
 
             //add appearance
-            formEl.append('容姿 ').append(this.createSelector('appearance', 10));
+            //容姿<div id='form_0'><select class='appearance'><option value="0"></option></select></div>
+            formEl.append('容姿 ').append(this.createSelector('appearance', 10)); 
             //add appearance
             formEl.append('性格 ').append(this.createSelector('character', 10));
             //add appearance
@@ -85,7 +86,8 @@
         	$.ajaxSetup({
         		url: "mainServlet",
         		type: "POST",
-        		cache: false
+        		cache: false,
+        		dataType:"json"
         	});
 
         	
@@ -98,7 +100,21 @@
         		},
         		success: function(data, textStatus){
         			console.log("textStatus =" + textStatus);
-        			console.log("data =" + data);
+        			console.log("data =" + data[0].name);
+        			
+        		    //set value to pull down button
+        		    var formEls = $('.formContainer').children();
+        		    //formElsの数がdataより少ない場合は追加して埋めるという処理が別途必要(TBD)
+        		    for(var i = 0; i < data.length; i++){
+        		    	var formEl = $(formEls[i]);
+        		    	formEl.find('.appearance').val(data[i].appearance);
+        		    	formEl.find('.character').val(data[i].chara);
+        	            formEl.find('.age').val(data[i].age);
+        	            formEl.find('.income').val(data[i].income);
+        	            formEl.find('.status').val(data[i].status);
+        	            formEl.find('.total').val(data[i].total);
+        		    }
+        		    
         		}
         	})
         });

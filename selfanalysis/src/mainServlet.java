@@ -64,7 +64,7 @@ public class mainServlet extends HttpServlet {
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(
 				response.getOutputStream(), "utf-8"));
 		// XMLOutputter outputter = new XMLOutputter();
-		response.setContentType("text/html; charset=utf-8");
+		response.setContentType("application/json; charset=utf-8");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 
