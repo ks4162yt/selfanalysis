@@ -51,7 +51,7 @@ public class profileDAO{
 
 		try{
 			Statement select = (Statement) con.createStatement();
-			String sql = "SELECT * FROM personalinfo WHERE id = (select id from nameid where name = '" + yourname + "')";
+			String sql = "SELECT * FROM personalInfo WHERE id = (select id from nameid where name = '" + yourname + "')";
 			result = select.executeQuery(sql);
 			returnSB = new StringBuffer();
 			while(result.next()){
