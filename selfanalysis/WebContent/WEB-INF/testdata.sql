@@ -5,7 +5,7 @@ CREATE TABLE nameid
 (
 name VARCHAR(20) not null unique,
 id int not null unique,
-gender VARCHR(6) not null unique
+isMale boolean not null unique
 );
 
 CREATE TABLE personalinfo
