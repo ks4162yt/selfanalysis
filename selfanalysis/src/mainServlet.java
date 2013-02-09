@@ -45,8 +45,14 @@ public class mainServlet extends HttpServlet {
 		
 		/* investigate profile date from database */
 		profileDAO dao = new profileDAO();
+		ArrayList array = new ArrayList();
 		ArrayList<profileTransferObject> profileList;
+		boolean isMale;
+		
 		profileList = dao.getYourProfile(yourname);
+		isMale  	= dao.getGender(yourname);
+		array.add(isMale);
+		array.add(profileList);
 		
 		for(int i=0;i<profileList.size();i++){
 			System.out.println(profileList.get(i).getName());
@@ -58,7 +64,7 @@ public class mainServlet extends HttpServlet {
         Gson gson = new Gson();
         
         //convert Array to json
-        String j_profile = gson.toJson(profileList);
+        String j_profile = gson.toJson(array);
         System.out.println(j_profile);
         
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(

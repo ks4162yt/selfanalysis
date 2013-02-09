@@ -132,4 +132,34 @@ public class profileDAO{
 		}
 	}
 
+	public boolean getGender(String yourname) {
+		// TODO 自動生成されたメソッド・スタブ
+		Connection con = createConnection();
+		ResultSet result = null;
+		boolean isMale = false;
+
+		try{
+			Statement select = (Statement) con.createStatement();
+			String sql = "select ismale from nameid where name = '" + yourname + "'";
+			result = select.executeQuery(sql);
+			while(result.next()){
+				isMale = result.getBoolean("ismale");
+			}
+			//returnSB.deleteCharAt(returnSB.length() - 1);
+		}catch (SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}finally{
+			if(con != null){
+				try{
+					con.close();
+				}catch(SQLException e){
+					e.printStackTrace();
+				}
+			}
+		}		
+		
+		return isMale;
+	}
+
 }

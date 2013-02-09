@@ -5,7 +5,8 @@ CREATE TABLE nameid
 (
 name VARCHAR(20) not null unique,
 id int not null unique,
-isMale boolean not null unique
+age int not null unique,
+ismale boolean not null unique
 );
 
 CREATE TABLE personalinfo
@@ -20,7 +21,7 @@ status int not null,
 total int not null
 );
 
-INSERT INTO nameid (name,id) VALUES('tsutomu',1);
+INSERT INTO nameid (name,id,age,ismale) VALUES('tsutomu',1,28,true);
 INSERT INTO personalinfo (id,name,appearance,chara,age,income,status,total) VALUES (1,'AIKO',9,7,4,5,5,8);
 INSERT INTO personalinfo (id,name,appearance,chara,age,income,status,total) VALUES (1,'KEIKO',7,8,9,9,10,9);
 INSERT INTO personalinfo (id,name,appearance,chara,age,income,status,total) VALUES (1,'YOSHIKO',10,6,6,6,9,10);

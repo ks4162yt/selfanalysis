@@ -29,6 +29,18 @@
 
     var formCreator = {
         id: 0,
+        
+        createGenderSelector: function(){
+        	var selectEl = $(document.createTextNode('あなたの性別: '));
+        	var selectEl_man = $(document.createElement('input'));
+        	selectEl_man.attr('type','radio').attr('name','gender').attr('value','1').attr('checked','checked').after('男');
+        	var selectEl_woman = $(document.createElement('input'));
+        	selectEl_woman.attr('type','radio').attr('name','gender').attr('value','2').after('女');
+        	selectEl_man.after(selectEl_woman);
+        	selectEl.after(selectEl_man);
+     	
+        	return selectEl;
+        },
 
         createSelector: function(type, range) {
             var selectorEl = $(document.createElement('select'));
@@ -45,13 +57,21 @@
 
             return selectorEl;
         },
+        
+        createNamebox: function(){
+        		var textEl = $(document.createElement('input'));
+        		textEl.addClass('theirname');
+        		textEl.attr('type','text').attr('size','15').attr('id',this.id + '');
+        		return textEl;
+        },
 
         create: function() {
             var formEl = $(document.createElement('div'));
             formEl.attr('id', 'form_' + this.id);
 
             //add appearance
-            //容姿<div id='form_0'><select class='appearance'><option value="0"></option></select></div>
+            //容姿<div id='form_0'><select class='appearance'><option value="0">0</option></select></div>
+            formEl.append('名前').append(this.createNamebox());
             formEl.append('容姿 ').append(this.createSelector('appearance', 10)); 
             //add appearance
             formEl.append('性格 ').append(this.createSelector('character', 10));
@@ -60,7 +80,7 @@
             //add appearance
             formEl.append('収入 ').append(this.createSelector('income', 10));
             //add appearance
-            formEl.append('学歴 ').append(this.createSelector('status', 10));
+            formEl.append('頭の良さ ').append(this.createSelector('status', 10));
             //add total
             formEl.append('総合 ').append(this.createSelector('total', 10));
             this.id++;
@@ -75,6 +95,9 @@
         function appendForm() {
             $('.formContainer').append(formCreator.create());
         }
+        
+        $('.formContainer').append(formCreator.createGenderSelector().after('<br><br>'));
+        
         for (var i = 0; i < 6; i++) {
             appendForm();
         }
